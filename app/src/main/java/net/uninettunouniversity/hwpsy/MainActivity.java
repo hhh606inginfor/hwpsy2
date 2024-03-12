@@ -21,6 +21,7 @@ import androidx.navigation.ui.NavigationUI;
 
 import net.uninettunouniversity.hwpsy.databinding.ActivityMainBinding;
 
+import java.util.Arrays;
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
@@ -59,7 +60,6 @@ public class MainActivity extends AppCompatActivity {
                     while (true){
                         addOtp();
                         Thread.sleep(10000);
-                        Log.d(msg, "Generato OTP");
                     }
 
                 } catch (InterruptedException e) {
@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void addOtp() {
 
-        Long tsLong = System.currentTimeMillis()/1000;
+        Long tsLong = System.currentTimeMillis();
         String timestamp = tsLong.toString();
 
         ContentValues values = new ContentValues();
@@ -93,6 +93,7 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 0; i < length; i++) {
             otp[i] = base.charAt(random_method.nextInt(base.length()));
         }
+        Log.d(msg, "Generato OTP " + Arrays.toString(otp));
         return new String(otp);
     }
 
@@ -102,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
 
         Uri students = Uri.parse(URL);
 
-        try (Cursor c = managedQuery(students, null, null, null, "otp")) {
+        try (Cursor c = managedQuery(students, null, null, null, "timestamp")) {
 
             c.moveToLast();
 
