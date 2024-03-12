@@ -13,6 +13,7 @@ public class OtpViewModel extends ViewModel {
         mText.setValue("This is otp fragment");
     }
 
+
     public LiveData<String> getText() {
         return mText;
     }

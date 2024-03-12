@@ -1,15 +1,20 @@
 package net.uninettunouniversity.hwpsy.ui.log;
 
+import android.annotation.SuppressLint;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import net.uninettunouniversity.hwpsy.OtpProvider;
 import net.uninettunouniversity.hwpsy.databinding.FragmentLogBinding;
 
 public class LogFragment extends Fragment {
@@ -28,6 +33,8 @@ public class LogFragment extends Fragment {
         logViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
         return root;
     }
+
+
 
     @Override
     public void onDestroyView() {

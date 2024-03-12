@@ -22,6 +22,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <provider
+            android:authorities="net.uninettunouniversity.hwpsy.OtpProvider"
+            android:name="OtpProvider"
+             />
+
     </application>
 
 </manifest>

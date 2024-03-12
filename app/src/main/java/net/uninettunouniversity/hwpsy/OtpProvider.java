@@ -8,10 +8,12 @@ import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.text.TextUtils;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,11 +24,11 @@ public class OtpProvider extends ContentProvider {
 
     static final String PROVIDER_NAME = "net.uninettunouniversity.hwpsy.OtpProvider";
     static final String URL = "content://" + PROVIDER_NAME + "/otpbucket";
-    static final Uri CONTENT_URI = Uri.parse(URL);
+    public static final Uri CONTENT_URI = Uri.parse(URL);
 
     static final String _ID = "_id";
-    static final String OTP = "otp";
-    static final String TIMESTAMP = "timestamp";
+    public static final String OTP = "otp";
+    public static final String TIMESTAMP = "timestamp";
 
     private static HashMap<String, String> OTPBUCKET_PROJECTION_MAP;
 
@@ -62,11 +64,17 @@ public class OtpProvider extends ContentProvider {
 
         @Override
         public void onCreate(SQLiteDatabase db) {
+
+            Log.d("-->","onCreate");
+
             db.execSQL(CREATE_DB_TABLE);
+
+
         }
 
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+            Log.d("-->","onUpgrade");
             db.execSQL("DROP TABLE IF EXISTS " + OTPBUCKET_TABLE_NAME);
             onCreate(db);
         }
@@ -74,6 +82,7 @@ public class OtpProvider extends ContentProvider {
 
     @Override
     public boolean onCreate() {
+        Log.d("-->","onCreate2");
         Context context = getContext();
         try (DatabaseHelper dbHelper = new DatabaseHelper(context)) {
 
@@ -86,6 +95,7 @@ public class OtpProvider extends ContentProvider {
     @Nullable
     @Override
     public Cursor query(@NonNull Uri uri, @Nullable String[] projection, @Nullable String selection, @Nullable String[] selectionArgs, @Nullable String sortOrder) {
+        open();
         SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
         qb.setTables(OTPBUCKET_TABLE_NAME);
         switch (uriMatcher.match(uri)) {
@@ -104,6 +114,7 @@ public class OtpProvider extends ContentProvider {
 
         Cursor c = qb.query(db, projection, selection, selectionArgs, null, null, sortOrder);
         c.setNotificationUri(getContext().getContentResolver(), uri);
+        close();
         return c;
     }
 
@@ -112,7 +123,7 @@ public class OtpProvider extends ContentProvider {
     public String getType(@NonNull Uri uri) {
         switch (uriMatcher.match(uri)) {
             case OTPBUCKET:
-                return "vnd.android.cursor.dir/vnd.otpbucket";
+                return "vnd.android.cursor.dir/vnd.uninettuno.otpbucket";
             case OTPBUCKET_ID:
                 return "vnd.android.cursor.item/vnd.otpbucket";
             default:
@@ -124,14 +135,14 @@ public class OtpProvider extends ContentProvider {
     @Nullable
     @Override
     public Uri insert(@NonNull Uri uri, @Nullable ContentValues values) {
-
+        open();
         Long rowID = db.insert(OTPBUCKET_TABLE_NAME, "", values);
         if (rowID > 0) {
             Uri _uri = ContentUris.withAppendedId(CONTENT_URI, rowID);
             getContext().getContentResolver().notifyChange(_uri, null);
             return _uri;
         }
-
+close();
         throw new SQLException("Failed to add a record into " + uri);
     }
 
@@ -171,5 +182,22 @@ public class OtpProvider extends ContentProvider {
 
         getContext().getContentResolver().notifyChange(uri, null);
         return count;
+    }
+
+    /** For OPEN database **/
+    public synchronized DatabaseHelper open() throws SQLiteException {
+        Context context = getContext();
+        DatabaseHelper dbHelper = new DatabaseHelper(context);
+
+            db = dbHelper.getWritableDatabase();
+
+        return dbHelper;
+    }
+
+    /** For CLOSE database **/
+    public void close() {
+        Context context = getContext();
+        DatabaseHelper dbHelper = new DatabaseHelper(context);
+        dbHelper.close();
     }
 }
