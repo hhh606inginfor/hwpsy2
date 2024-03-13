@@ -13,7 +13,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.text.TextUtils;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -55,9 +54,6 @@ public class OtpProvider extends ContentProvider {
                     " otp TEXT NOT NULL," +
                     " timestamp INTEGER NOT NULL);";
 
-
-
-
     private static class DatabaseHelper extends SQLiteOpenHelper {
 
         public DatabaseHelper(Context context) {
@@ -67,8 +63,6 @@ public class OtpProvider extends ContentProvider {
         @Override
         public void onCreate(SQLiteDatabase db) {
 
-            Log.d("-->","onCreate");
-
             db.execSQL(CREATE_DB_TABLE);
 
 
@@ -76,7 +70,6 @@ public class OtpProvider extends ContentProvider {
 
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-            Log.d("-->","onUpgrade");
             db.execSQL("DROP TABLE IF EXISTS " + OTPBUCKET_TABLE_NAME);
             onCreate(db);
         }
@@ -84,12 +77,8 @@ public class OtpProvider extends ContentProvider {
 
     }
 
-
-
-
     @Override
     public boolean onCreate() {
-        Log.d("-->","onCreate2");
         Context context = getContext();
         try (DatabaseHelper dbHelper = new DatabaseHelper(context)) {
 
@@ -195,7 +184,6 @@ close();
 
 
 
-    /** For OPEN database **/
     public synchronized DatabaseHelper open() throws SQLiteException {
         Context context = getContext();
         DatabaseHelper dbHelper = new DatabaseHelper(context);
@@ -205,7 +193,6 @@ close();
         return dbHelper;
     }
 
-    /** For CLOSE database **/
     public void close() {
         Context context = getContext();
         DatabaseHelper dbHelper = new DatabaseHelper(context);

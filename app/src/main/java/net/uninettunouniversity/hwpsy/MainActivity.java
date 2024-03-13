@@ -2,7 +2,6 @@ package net.uninettunouniversity.hwpsy;
 
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -11,38 +10,27 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
-import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import net.uninettunouniversity.hwpsy.databinding.ActivityMainBinding;
-import net.uninettunouniversity.hwpsy.ui.log.LogFragment;
-import net.uninettunouniversity.hwpsy.ui.log.LogViewModel;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
     String msg = "Android : ";
     private ActivityMainBinding binding;
-
-    private LogFragment logFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,26 +40,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         BottomNavigationView navView = findViewById(R.id.nav_view);
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.navigation_home, R.id.navigation_otp, R.id.navigation_log)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
-
-
-//        logFragment= new LogFragment();
-//
-//        FragmentManager fragmentManager = getSupportFragmentManager();
-//        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//        fragmentTransaction.replace(R.id.nav_host_fragment_activity_main, logFragment).commitNow();
-//
-//        //  And yet, the fragment is in the list of fragments
-//        if (logFragment != null)
-//            logFragment.setTextViewLogs("Hi There");   // this worked!
-
 
     }
 
