@@ -8,6 +8,19 @@
     android:tag="myFragmentTag"
     tools:context=".ui.log.LogFragment">
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/floatingActionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="18dp"
+        android:layout_marginBottom="103dp"
+        android:clickable="true"
+        android:src="@drawable/ic_recicle_black"
+        android:onClick="truncateDB"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:ignore="MissingConstraints" />
+
     <TextView
         android:id="@+id/text_log"
         android:layout_width="match_parent"

@@ -56,6 +56,8 @@ public class OtpProvider extends ContentProvider {
                     " timestamp INTEGER NOT NULL);";
 
 
+
+
     private static class DatabaseHelper extends SQLiteOpenHelper {
 
         public DatabaseHelper(Context context) {
@@ -78,7 +80,12 @@ public class OtpProvider extends ContentProvider {
             db.execSQL("DROP TABLE IF EXISTS " + OTPBUCKET_TABLE_NAME);
             onCreate(db);
         }
+
+
     }
+
+
+
 
     @Override
     public boolean onCreate() {
@@ -165,6 +172,8 @@ close();
         return count;
     }
 
+
+
     @Override
     public int update(@NonNull Uri uri, @Nullable ContentValues values, @Nullable String selection, @Nullable String[] selectionArgs) {
         int count = 0;
@@ -183,6 +192,8 @@ close();
         getContext().getContentResolver().notifyChange(uri, null);
         return count;
     }
+
+
 
     /** For OPEN database **/
     public synchronized DatabaseHelper open() throws SQLiteException {

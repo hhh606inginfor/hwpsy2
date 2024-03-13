@@ -5,6 +5,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -111,6 +112,16 @@ public class MainActivity extends AppCompatActivity {
         );
 
 //        logFragment.setTextViewLogs("aaaaaaa");
+
+    }
+
+    public void truncateDB(View v) {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            getContentResolver().delete(
+                    OtpProvider.CONTENT_URI,null
+            );
+        }
 
     }
 
