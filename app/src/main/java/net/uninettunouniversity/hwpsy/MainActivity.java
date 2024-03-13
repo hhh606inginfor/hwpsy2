@@ -3,6 +3,7 @@ package net.uninettunouniversity.hwpsy;
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
@@ -83,8 +84,19 @@ public class MainActivity extends AppCompatActivity {
 
                 try {
 
+
+
+
+                    Intent intent = new Intent();
+                    intent.setAction("net.uninettunouniversity.hwpsy.REFRESH_INTENT");
+                    intent.putExtra("From", "sendInternalBroadcast");
+
+
+
+
                     while (true){
                         addOtp();
+                        sendBroadcast(intent);
                         Thread.sleep(10000);
                     }
 
