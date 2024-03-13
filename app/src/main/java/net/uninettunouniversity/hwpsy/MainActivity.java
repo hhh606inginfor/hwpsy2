@@ -147,7 +147,7 @@ public class MainActivity extends AppCompatActivity {
 
         String ret = "";
 
-        try (Cursor c = managedQuery(otpbucket, null, null, null, "otp")) {
+        try (Cursor c = managedQuery(otpbucket, null, null, null, "timestamp desc")) {
 
             if (c.moveToFirst()) {
                 do {
