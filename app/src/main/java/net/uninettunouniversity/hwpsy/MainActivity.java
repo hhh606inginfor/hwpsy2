@@ -85,16 +85,11 @@ public class MainActivity extends AppCompatActivity {
                 try {
 
 
-
-
                     Intent intent = new Intent();
                     intent.setAction("net.uninettunouniversity.hwpsy.REFRESH_INTENT");
                     intent.putExtra("From", "sendInternalBroadcast");
 
-
-
-
-                    while (true){
+                    while (true) {
                         addOtp();
                         sendBroadcast(intent);
                         Thread.sleep(10000);
@@ -116,14 +111,12 @@ public class MainActivity extends AppCompatActivity {
 
         ContentValues values = new ContentValues();
 
-        values.put(OtpProvider.OTP, generateOTP(8,timestamp));
+        values.put(OtpProvider.OTP, generateOTP(8, timestamp));
         values.put(OtpProvider.TIMESTAMP, timestamp);
 
         Uri uri = getContentResolver().insert(
                 OtpProvider.CONTENT_URI, values
         );
-
-//        logFragment.setTextViewLogs("aaaaaaa");
 
     }
 
@@ -131,13 +124,17 @@ public class MainActivity extends AppCompatActivity {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             getContentResolver().delete(
-                    OtpProvider.CONTENT_URI,null
+                    OtpProvider.CONTENT_URI, null
             );
+            Intent intent = new Intent();
+            intent.setAction("net.uninettunouniversity.hwpsy.REFRESH_INTENT");
+            intent.putExtra("From", "sendInternalBroadcast");
+            sendBroadcast(intent);
         }
 
     }
 
-    private String generateOTP(int length, String base){
+    private String generateOTP(int length, String base) {
         Random random_method = new Random();
         char[] otp = new char[length];
         for (int i = 0; i < length; i++) {
@@ -157,11 +154,12 @@ public class MainActivity extends AppCompatActivity {
 
             c.moveToLast();
 
-            TextView t = (TextView)v.getRootView().findViewById(R.id.textView2);
+            TextView t = (TextView) v.getRootView().findViewById(R.id.textView2);
             t.setText(c.getString(c.getColumnIndex(OtpProvider.OTP)));
 
         }
     }
+
     @SuppressLint("Range")
     public String retrieveOtps() {
         String URL = "content://net.uninettunouniversity.hwpsy.OtpProvider";
