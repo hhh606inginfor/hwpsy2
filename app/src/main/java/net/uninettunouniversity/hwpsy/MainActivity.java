@@ -101,30 +101,24 @@ public class MainActivity extends AppCompatActivity {
     public void retrieveLastOtp(View v) {
         String URL = "content://net.uninettunouniversity.hwpsy.OtpProvider";
 
-        Uri students = Uri.parse(URL);
+        Uri otpbucket = Uri.parse(URL);
 
-        try (Cursor c = managedQuery(students, null, null, null, "timestamp")) {
+        try (Cursor c = managedQuery(otpbucket, null, null, null, "timestamp")) {
 
             c.moveToLast();
 
             TextView t = (TextView)v.getRootView().findViewById(R.id.textView2);
             t.setText(c.getString(c.getColumnIndex(OtpProvider.OTP)));
 
-
-//            Toast.makeText(this,
-//                            c.getString(c.getColumnIndex(OtpProvider._ID)) + "," +
-//                                    c.getString(c.getColumnIndex(OtpProvider.OTP)) + "," +
-//                                    c.getString(c.getColumnIndex(OtpProvider.TIMESTAMP))
-//                            , Toast.LENGTH_SHORT).show();
         }
     }
     @SuppressLint("Range")
-    public void retrieveOtps(View v) {
+    public void retrieveOtps() {
         String URL = "content://net.uninettunouniversity.hwpsy.OtpProvider";
 
-        Uri students = Uri.parse(URL);
+        Uri otpbucket = Uri.parse(URL);
 
-        try (Cursor c = managedQuery(students, null, null, null, "otp")) {
+        try (Cursor c = managedQuery(otpbucket, null, null, null, "otp")) {
 
             if (c.moveToFirst()) {
                 do {
