@@ -14,19 +14,33 @@ import android.widget.Toast;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import net.uninettunouniversity.hwpsy.databinding.ActivityMainBinding;
+import net.uninettunouniversity.hwpsy.ui.log.LogFragment;
+import net.uninettunouniversity.hwpsy.ui.log.LogViewModel;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
     String msg = "Android : ";
     private ActivityMainBinding binding;
+
+    private LogFragment logFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +58,17 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
+
+
+//        logFragment= new LogFragment();
+//
+//        FragmentManager fragmentManager = getSupportFragmentManager();
+//        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//        fragmentTransaction.replace(R.id.nav_host_fragment_activity_main, logFragment).commitNow();
+//
+//        //  And yet, the fragment is in the list of fragments
+//        if (logFragment != null)
+//            logFragment.setTextViewLogs("Hi There");   // this worked!
 
 
     }
@@ -85,6 +110,8 @@ public class MainActivity extends AppCompatActivity {
                 OtpProvider.CONTENT_URI, values
         );
 
+//        logFragment.setTextViewLogs("aaaaaaa");
+
     }
 
     private String generateOTP(int length, String base){
@@ -113,25 +140,36 @@ public class MainActivity extends AppCompatActivity {
         }
     }
     @SuppressLint("Range")
-    public void retrieveOtps() {
+    public String retrieveOtps() {
         String URL = "content://net.uninettunouniversity.hwpsy.OtpProvider";
 
         Uri otpbucket = Uri.parse(URL);
+
+        String ret = "";
 
         try (Cursor c = managedQuery(otpbucket, null, null, null, "otp")) {
 
             if (c.moveToFirst()) {
                 do {
-                    Toast.makeText(this,
-                            c.getString(c.getColumnIndex(OtpProvider._ID)) + "," +
-                                    c.getString(c.getColumnIndex(OtpProvider.OTP)) + "," +
-                                    c.getString(c.getColumnIndex(OtpProvider.TIMESTAMP))
-                            , Toast.LENGTH_SHORT).show();
+
+                    Instant instant = Instant.ofEpochMilli(Long.parseLong(c.getString(c.getColumnIndex(OtpProvider.TIMESTAMP))));
+                    LocalDateTime localDateTime =
+                            LocalDateTime.ofInstant(instant, ZoneId.of("GMT+1"));
+
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+                    String formattedDateTime = localDateTime.format(formatter);
+
+                    ret +=
+                            c.getString(c.getColumnIndex(OtpProvider.OTP)) + "\t" +
+                                    formattedDateTime + "\n";
+
                 } while (c.moveToNext());
             }
 
 
         }
+
+        return ret;
     }
 
 }

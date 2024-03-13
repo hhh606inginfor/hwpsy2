@@ -53,7 +53,7 @@ public class OtpProvider extends ContentProvider {
             "CREATE TABLE " + OTPBUCKET_TABLE_NAME +
                     " (_id INTEGER PRIMARY KEY AUTOINCREMENT," +
                     " otp TEXT NOT NULL," +
-                    " timestamp TEXT NOT NULL);";
+                    " timestamp INTEGER NOT NULL);";
 
 
     private static class DatabaseHelper extends SQLiteOpenHelper {
